@@ -3,12 +3,16 @@ package com.example.pizzaapp
 import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
+import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
+import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteOpenHelper
 import android.graphics.Bitmap
 import android.graphics.Bitmap.CompressFormat
+import android.graphics.BitmapFactory
 import android.widget.Toast
 import com.example.pizzaapp.model.MenuModel
+import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 
 class DatabaseHelper(var context: Context): SQLiteOpenHelper(
@@ -177,5 +181,41 @@ class DatabaseHelper(var context: Context): SQLiteOpenHelper(
             Toast.makeText(context, "Add Menu Success", Toast.LENGTH_SHORT).show()
         }
         db.close()
+    }
+
+    @SuppressLint("Range")
+    fun showMenu():ArrayList<MenuModel>{
+        val listModel = ArrayList<MenuModel>()
+        val db = this.readableDatabase
+        var cursor:Cursor?=null
+        try{
+            cursor = db.rawQuery("SELECT * FROM " + TABLE_MENU, null)
+        }catch (se:SQLiteException){
+            db.execSQL(CREATE_MENU_TABLE)
+            return ArrayList()
+        }
+
+        var id:Int
+        var name:String
+        var price:Int
+        var imageArray:ByteArray
+        var imageBmp:Bitmap
+
+        if(cursor.moveToFirst()){
+            do{
+                //get data text
+                id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID_MENU))
+                name = cursor.getString(cursor.getColumnIndex(COLUMN_NAMA_MENU))
+                price = cursor.getInt(cursor.getColumnIndex(COLUMN_PRICE_MENU))
+                //get data image
+                imageArray = cursor.getBlob(cursor.getColumnIndex(COLUMN_IMAGE))
+                //convert ByteArray to Bitmap
+                val byteInputStream = ByteArrayInputStream(imageArray)
+                imageBmp = BitmapFactory.decodeStream(byteInputStream)
+                val model = MenuModel(id = id, name = name, price = price, image = imageBmp)
+                listModel.add(model)
+            }while (cursor.moveToNext())
+        }
+        return listModel
     }
 }
