@@ -10,15 +10,22 @@ import android.widget.EditText
 import android.widget.ImageView
 import com.example.pizzaapp.model.MenuModel
 
-class AddMenuActivity : AppCompatActivity() {
+class EditMenuActivity : AppCompatActivity() {
     lateinit var image : ImageView
     companion object{
         val IMAGE_REQUEST_CODE = 100
+        var idMakanan = 1
+        var namaMakanan = "test"
+        var hargaMakanan = 10000
+        lateinit var gambarMakanan : Bitmap
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_menu)
+        setContentView(R.layout.activity_edit_menu)
+
+        //hide title bar
+        getSupportActionBar()?.hide()
 
         //instance
         image = findViewById(R.id.imageMenu)
@@ -26,18 +33,20 @@ class AddMenuActivity : AppCompatActivity() {
         val textName : EditText = findViewById(R.id.menuName)
         val textPrice : EditText = findViewById(R.id.menuPrice)
         val btnAddImage : Button = findViewById(R.id.buttonAddImage)
-        val btnSaveMenu : Button = findViewById(R.id.buttonSaveMenu)
+        val btnUpdate : Button = findViewById(R.id.buttonUpdateMenu)
+
+        //set data
+        textId.setText(idMakanan.toString())
+        textName.setText(namaMakanan)
+        textPrice.setText(hargaMakanan.toString())
+        image.setImageBitmap(gambarMakanan)
 
         //event saat button add (+) di klik
         btnAddImage.setOnClickListener{
             pickImageGalery()
         }
 
-        //hide title bar
-        getSupportActionBar()?.hide()
-
-        //event saat button save di klik
-        btnSaveMenu.setOnClickListener{
+        btnUpdate.setOnClickListener{
             //object class databaseHelper
             val databaseHelper = DatabaseHelper(this)
 
@@ -48,27 +57,26 @@ class AddMenuActivity : AppCompatActivity() {
             val bitmap : Bitmap = bitmapDrawable.bitmap
 
             val menuModel = MenuModel(id,name,price,bitmap)
-            databaseHelper.addMenu(menuModel)
+            databaseHelper.editMenu(menuModel)
 
             //intent main activity
             val intent = Intent(this,MainActivity::class.java)
             startActivity(intent)
+
         }
+
+
     }
     private fun pickImageGalery(){
         val intent = Intent(Intent.ACTION_PICK)
         intent.type = "image/"
-        startActivityForResult(intent, IMAGE_REQUEST_CODE)
+        startActivityForResult(intent, AddMenuActivity.IMAGE_REQUEST_CODE)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?){
         super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode == IMAGE_REQUEST_CODE && resultCode == RESULT_OK){
+        if(requestCode == AddMenuActivity.IMAGE_REQUEST_CODE && resultCode == RESULT_OK){
             image.setImageURI(data?.data)
         }
     }
-
-
-
-
 }
