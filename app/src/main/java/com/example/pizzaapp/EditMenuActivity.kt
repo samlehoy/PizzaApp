@@ -57,7 +57,7 @@ class EditMenuActivity : AppCompatActivity() {
             val bitmap : Bitmap = bitmapDrawable.bitmap
 
             val menuModel = MenuModel(id,name,price,bitmap)
-            databaseHelper.editMenu(menuModel)
+            databaseHelper.updateMenu(menuModel)
 
             //intent main activity
             val intent = Intent(this,MainActivity::class.java)

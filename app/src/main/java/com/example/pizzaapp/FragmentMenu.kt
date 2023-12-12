@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 // TODO: Rename parameter arguments, choose names that match
@@ -41,8 +40,13 @@ class FragmentMenu : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_menu, container, false)
         val rvmenu:RecyclerView = view.findViewById(R.id.recyclerMenu)
+        //instance database helper
+        val databaseHelper = DatabaseHelper(this.requireContext())
+        //call function show data menu
+        val listData = databaseHelper.showMenu()
+        //set layout recycler view
         rvmenu.layoutManager = GridLayoutManager(activity,2)
-        rvmenu.adapter = MenuAdapter()
+        rvmenu.adapter = MenuAdapter(listData)
 
         return view
     }

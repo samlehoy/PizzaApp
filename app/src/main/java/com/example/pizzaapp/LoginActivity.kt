@@ -36,20 +36,12 @@ class LoginActivity : AppCompatActivity() {
             //instance
             val dbHelper = DatabaseHelper(this)
             val result:Boolean = dbHelper.checkLogin(txtUsername.text.toString(), txtPassword.text.toString())
-
-            if(result){
+            if(result == true){
+                Toast.makeText(this@LoginActivity,"Login Success ", Toast.LENGTH_SHORT).show()
                 val intentLogin = Intent(this@LoginActivity, MainActivity::class.java)
                 startActivity(intentLogin)
             }else {
                 Toast.makeText(this@LoginActivity, "Login gagal, coba lagi !!", Toast.LENGTH_SHORT).show()
-            }
-
-            //check data
-            val data:String? = dbHelper.checkData(txtUsername.text.toString())
-            Toast.makeText(this@LoginActivity, "Result : " + data, Toast.LENGTH_SHORT).show()
-            if (data==null) {
-                //insert data
-                dbHelper.addAccount("damaradii.nugroho@gmail.com", "damar adi nugroho", "cashier", "12345")
             }
         }
     }
