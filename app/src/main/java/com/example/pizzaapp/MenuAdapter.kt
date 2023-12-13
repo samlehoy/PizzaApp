@@ -13,11 +13,8 @@ import com.example.pizzaapp.model.MenuModel
 
 class MenuAdapter(private val list: ArrayList<MenuModel>) : RecyclerView.Adapter<MenuAdapter.MenuViewHolder>(){
 
-    val data = listOf("aaa","bbbb","cccc","dddd","eeee","ffff","gggg","hhhh")
-
-
     override fun getItemCount(): Int {
-        return  data.size
+        return  list.size
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MenuViewHolder {
@@ -30,7 +27,7 @@ class MenuAdapter(private val list: ArrayList<MenuModel>) : RecyclerView.Adapter
 
     override fun onBindViewHolder(holder: MenuViewHolder, position: Int) {
 
-        holder.textNama.text = data[position]
+        holder.bind(list[position])
 
     }
 

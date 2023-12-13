@@ -44,6 +44,7 @@ class FragmentMenu : Fragment() {
         val databaseHelper = DatabaseHelper(this.requireContext())
         //call function show data menu
         val listData = databaseHelper.showMenu()
+
         //set layout recycler view
         rvmenu.layoutManager = GridLayoutManager(activity,2)
         rvmenu.adapter = MenuAdapter(listData)
